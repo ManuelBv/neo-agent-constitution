@@ -1,0 +1,11 @@
+# Allowlist: ignore everything at root by default, only .claude/ is tracked.
+# This repo exists solely to publish neo/.claude/ (universal Claude Code
+# config, shared across all subfolder projects, each of which has its own
+# independent git repo that this root repo must never see or touch).
+/*
+!/.claude
+!/.gitignore
+!/README.md
+
+# Inside .claude/, ignore local-only settings that shouldn't be published.
+.claude/settings.local.json
