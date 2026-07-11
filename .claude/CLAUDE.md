@@ -6,6 +6,16 @@ instead of being copy-pasted (and drifting) across each project's own
 CLAUDE.md. Project-local CLAUDE.md files may add project-specific rules on
 top of this, but should not redefine what's here.
 
+### Environment Fact: `apps/*` subfolders are often independent git repos
+Many folders under `apps/` (e.g. `ceiling-designer`, `agent-smith`,
+`purrfect-blocks`) are their own nested git repositories, separate from the
+`neo` root repo — `git status`/`git push` run at the root only ever sees
+the root repo's own tracked files. Before any "commit/push my changes"
+request, check each app folder actually touched for its own `.git`
+(`find <app-path> -maxdepth 1 -iname .git` or equivalent) and commit/push
+each repo independently — don't assume one root-level push covers
+everything.
+
 ---
 
 ## Core Behavioral Rules
