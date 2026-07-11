@@ -140,6 +140,36 @@ Rules:
 ### Session Management
 - On chat start: review the initial prompt and suggest improvements
 
+### Session Close: Knowledge Capture Check
+Before closing out a conversation, scan it for new knowledge items worth
+persisting to root CLAUDE.md — new patterns, requirements, environment
+facts, corrections, or rules that emerged and would be useful in future
+sessions across any project under `neo/`.
+
+**Trigger conditions** — run this check when:
+- The user signals the conversation is ending ("job done", "let's continue
+  tomorrow", "that's it for today", "thanks, done", or similar wording), or
+- The user explicitly asks to close/wrap up the session
+
+**Behavior:**
+1. Review the conversation for candidate knowledge items: new behavioral
+   rules, corrected assumptions, newly discovered environment constraints,
+   recurring patterns, or requirements that aren't already captured in
+   root CLAUDE.md or project-local CLAUDE.md files
+2. If candidates exist: propose them explicitly, one by one or as a short
+   list, and ask whether to add each to root CLAUDE.md (or the relevant
+   project-local CLAUDE.md if the item is project-specific rather than
+   universal)
+3. If no candidates exist: state plainly that there is nothing new to
+   store — do not force an item into existence
+4. Only write to CLAUDE.md after the user confirms — this check proposes,
+   it does not unilaterally edit
+
+This is distinct from the auto-memory system (which captures user/
+feedback/project/reference context automatically); this check is
+specifically about surfacing durable, universal rule-like knowledge for
+root CLAUDE.md at natural session boundaries.
+
 ---
 
 ## markitdown Skill
