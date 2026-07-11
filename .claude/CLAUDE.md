@@ -240,6 +240,31 @@ still duplicated in several per-project `.claude/skills/` /
 
 ---
 
+## Multi-Agent Patterns Shorthand
+
+When the user says **"use the `tiered` pattern"**, **"use the `fanout` pattern"**,
+or **"use the `dual-review` pattern"** for a task, that refers to one of the
+three reusable agent-orchestration patterns below. Every pattern follows the
+same folder convention at the repo root:
+
+```
+.claude/agents/<pattern>/
+├── README.md      ← how the pattern works: pipeline shape, doc/file conventions, when to use it
+└── *.md           ← the canonical agent definitions themselves (with model: tiers set)
+```
+
+**Always read `.claude/agents/<pattern>/README.md` before running that
+pattern** — it's the one place that explains the pattern's mechanics, not
+just its agent roles.
+
+| Name | Folder | One-line explanation |
+|---|---|---|
+| `tiered` | `.claude/agents/tiered/` | Sequential Full/Short-routed pipeline (Speccer→[Researcher→Planner]→Implementer→Reviewer), checklist-based independent Reviewer, capped at 5 rounds |
+| `fanout` | `.claude/agents/fanout/` | Fixed, named 2-agent pairs dispatched together (e.g. `legal/technical`, `coder/unittester`) — not dynamic N-worker decomposition; invoke by pair name |
+| `dual-review` | `.claude/agents/dual-review/` | Two independent reviewers (different models) vote in parallel on one narrow rubric row, one round only; disagreement escalates to a tool-grounded check or a human |
+
+---
+
 ## Session Archival Protocol
 
 Full skill definition: `neo/.claude/skills/session-archive/SKILL.md`.
