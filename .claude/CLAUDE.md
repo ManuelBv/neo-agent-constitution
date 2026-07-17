@@ -16,6 +16,12 @@ request, check each app folder actually touched for its own `.git`
 each repo independently — don't assume one root-level push covers
 everything.
 
+### Rule: `git init` always uses `main`, never `master`
+When running `git init` (or otherwise creating a new local repo), pass
+`-b main` directly, or immediately run `git branch -m main` before the
+first commit if the tool/environment doesn't support `-b`. Don't wait for
+the user to catch a `master` branch later — set it correctly up front.
+
 ---
 
 ## Core Behavioral Rules
