@@ -1,10 +1,11 @@
 # Sentinel Pattern — How It Works
 
 A dynamic, N-worker fan-out audit pipeline for auditing an unfamiliar codebase end to end —
-security, performance, reliability, accessibility, product/UX, dev tooling, and stack-specific
-domains like RAG-for-TTS vs RAG-for-LLM — then fixing prioritized issues with minimal, surgical,
-test-backed commits. Built for the Speechify Platform "Refactoring LLM Assessment" format (90
-minutes, TypeScript monorepo, pnpm), but usable for any timed or untimed whole-repo audit.
+security (including supply chain), performance, reliability, accessibility, product/UX, API
+design, documentation, dev tooling/CI-CD, and stack-specific domains like RAG-for-TTS vs
+RAG-for-LLM — then fixing prioritized issues with minimal, surgical, test-backed commits. Built
+for the Speechify Platform "Refactoring LLM Assessment" format (90 minutes, TypeScript monorepo,
+pnpm), but usable for any timed or untimed whole-repo audit.
 
 ## Entry point
 
@@ -83,11 +84,12 @@ its status before assuming it's still open.
 
 LLMs don't have reliable causal/severity judgment across unrelated domains (a security hole vs an
 accessibility gap vs a performance regression aren't commensurable without an external anchor).
-`ranker.md` carries a fixed baseline order (security/PII leakage > reliability/data-loss >
-accessibility > performance > style/maintainability) sourced from OWASP Risk Rating and WCAG
-conformance-level conventions, so ranking is reproducible even if a WebSearch mid-run fails or
-returns thin results. The per-run WebSearch step refines or overrides specific rows using current
-guidance — it does not replace the backbone.
+`ranker.md` carries a fixed baseline order (security/PII leakage > supply chain > reliability/
+data-loss > exceptional-condition mishandling > accessibility > performance > API contract >
+style/maintainability) sourced from OWASP Risk Rating (2025 Top 10) and WCAG conformance-level
+conventions, so ranking is reproducible even if a WebSearch mid-run fails or returns thin results.
+The per-run WebSearch step refines or overrides specific rows using current guidance — it does not
+replace the backbone.
 
 ## Docs structure
 

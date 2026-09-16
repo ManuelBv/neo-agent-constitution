@@ -42,16 +42,33 @@ Based on what you actually found (not a canned list), propose one auditor per di
 that carries real risk in this repo. Typical domains that show up, purely as prior art — do not
 treat this as the roster to reuse verbatim:
 
-- `security` — OWASP-class issues, secrets, auth, injection
-- `perf-frontend` / `perf-backend` — if both exist as distinct layers
+- `security` — OWASP-class issues, secrets, auth, injection, and software supply chain risk
+  (dependency provenance, unpinned/mutable build inputs, hallucinated or typosquatted packages,
+  unsigned/unverified CI build steps) — this last group is now its own top-tier OWASP 2025
+  category (Software Supply Chain Failures), not a footnote under generic dependency hygiene
+- `perf-frontend` / `perf-backend` — if both exist as distinct layers. Point whichever auditor(s)
+  you propose at profiling evidence, not just code inspection by eye — if the repo has any
+  profiling output, benchmark suite, or APM integration, have the auditor read/run it rather than
+  guessing hot paths from static reading alone
 - `rag-tts-patterns` vs `rag-llm-patterns` — **only if the repo actually has RAG code**, and only
   as two separate auditors if it has both a text-to-speech-serving RAG path and a general
   LLM-answering RAG path (they have different failure modes — audio latency/streaming vs
   hallucination/retrieval-quality — don't collapse them into one auditor if both exist)
 - `accessibility` — if there's a frontend
 - `product-ux` — flows, error states, empty states, confusing UX from a user's perspective
-- `dev-tooling` — CI, build config, lint/type-check setup, dependency hygiene
-- `reliability` — error handling, retries, data-loss risk, race conditions
+- `api-design` — if the repo exposes a REST/GraphQL/RPC API: contract stability, versioning and
+  deprecation strategy, idempotency on mutating endpoints, consistent error/response shapes,
+  pagination/rate-limiting conventions. Propose this as its own auditor whenever there's a
+  meaningfully-sized API surface — don't fold it into `security` or `product-ux`, since contract
+  and lifecycle issues are a distinct failure mode from both.
+- `dev-tooling` — CI/CD pipeline itself as a security and reliability control, not just lint config:
+  SAST/DAST/SCA scanning wired into the pipeline, secrets-scanning on commits/builds, dependency
+  provenance and SBOM presence, build reproducibility, lint/type-check setup, test coverage gaps
+- `documentation` — if the repo has a README, docs/ folder, or API reference: staleness against
+  current code, whether docs are generated from a source of truth (OpenAPI/schema) or hand-maintained
+  and drifting, missing onboarding/setup instructions, undocumented breaking changes. Worth proposing
+  even on a small repo if the docs clearly don't match current behavior.
+- `reliability` — error handling, retries, data-loss risk, race conditions, unsafe failure states
 
 For each proposed auditor, state in one line: domain, why it's relevant to *this* repo
 specifically (cite what you found in profiling), and which deterministic tool(s) it should run.

@@ -26,17 +26,31 @@ Ordered highest to lowest priority, category first, severity within category sec
    loggable in plaintext. Always highest priority regardless of exploit complexity.
 2. **Security — critical/high (OWASP-class)** — auth bypass, injection, broken access control,
    SSRF, insecure deserialization.
-3. **Reliability — data loss or corruption risk** — race conditions, unhandled failure modes that
+3. **Software supply chain failures** — compromised or unverified dependencies, unpinned/mutable
+   build inputs, tampered or unsigned CI/CD build steps, hallucinated/typosquatted packages. Ranks
+   here (not under general dev-tooling) because a compromised dependency or build step has the same
+   blast radius as a direct app vulnerability — OWASP elevated this to its own top-tier category in
+   the 2025 Top 10 for exactly this reason.
+4. **Reliability — data loss or corruption risk** — race conditions, unhandled failure modes that
    corrupt or lose persisted data.
-4. **Security — medium/low** — issues that need a specific precondition or don't directly expose
+5. **Mishandling of exceptional conditions** — unhandled exceptions, unsafe failure/fallback states,
+   or swallowed errors that can cascade into a security breakdown (e.g. failing open on an auth
+   check, or an unhandled exception exposing a stack trace with internal details). Distinct from
+   plain availability-risk reliability findings below: this category is specifically about failure
+   states that create a security or data-integrity consequence, not just a crash.
+6. **Security — medium/low** — issues that need a specific precondition or don't directly expose
    data (e.g. missing rate limiting, verbose error messages).
-5. **Accessibility — WCAG Level A violations** — blocks access entirely for some users.
-6. **Reliability — availability risk without data loss** — crashes, unhandled exceptions,
-   missing retries on transient failures.
-7. **Accessibility — WCAG Level AA violations** — degrades access, doesn't block it.
-8. **Performance** — regressions with measurable user or cost impact.
-9. **Dev tooling / maintainability** — missing tests, lint/type errors, CI gaps, dead code.
-10. **Style / cosmetic** — lowest priority; only fix if time remains after everything above.
+7. **Accessibility — WCAG Level A violations** — blocks access entirely for some users.
+8. **Reliability — availability risk without data loss** — crashes, unhandled exceptions,
+   missing retries on transient failures, with no security or data-integrity consequence.
+9. **Accessibility — WCAG Level AA violations** — degrades access, doesn't block it.
+10. **Performance** — regressions with measurable user or cost impact.
+11. **API design/contract issues** — breaking changes without versioning, missing idempotency
+    protection on mutating endpoints, inconsistent error/response shapes — rank by actual blast
+    radius (a breaking undocumented change to a public contract can outrank plain performance).
+12. **Dev tooling / maintainability / documentation** — missing tests, lint/type errors, CI gaps
+    unrelated to supply chain, dead code, stale or missing documentation.
+13. **Style / cosmetic** — lowest priority; only fix if time remains after everything above.
 
 This ordering exists because: security and data-integrity failures compound silently and are far
 more expensive to discover late than to fix now; accessibility blockers deny access entirely
@@ -48,7 +62,9 @@ irreversible if deferred.
 
 The static rubric is a safety net, not the final word. Before finalizing rank, WebSearch current
 guidance to confirm or adjust:
-- OWASP current risk-rating guidance for any security finding's exact severity
+- OWASP current risk-rating guidance for any security finding's exact severity — including whether
+  it now falls under Software Supply Chain Failures or Mishandling of Exceptional Conditions rather
+  than a pre-2025 category the auditor may have used
 - WCAG conformance level and current guidance for any accessibility finding
 - Whether any finding maps to a recently-elevated or recently-downgraded issue class
 
